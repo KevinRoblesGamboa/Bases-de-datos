@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Tienda Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        #registerForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="login()">Iniciar Sesión</button>
+        <div class="link" onclick="showRegister()">Crear cuenta nueva</div>
+    </div>
+
+    <div class="container" id="registerForm">
+        <h2>Registro</h2>
+        <input type="text" id="newUsername" placeholder="Nuevo Usuario">
+        <input type="password" id="newPassword" placeholder="Nueva Contraseña">
+        <input type="password" id="confirmPassword" placeholder="Confirmar Contraseña">
+        <button onclick="register()">Registrar</button>
+        <div class="link" onclick="showLogin()">Cancelar</div>
+    </div>
+
+    <script>
+        // Simulación de base de datos
+        const users = [
+            { username: "admin", password: "admin", role: "admin", active: true },
+            { username: "user1", password: "1234", role: "user", active: true },
+        ];
+
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                if (user.active) {
+                    if (user.role === "admin") {
+                        alert("Bienvenido Administrador");
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("Bienvenido Cliente");
+                        window.location.href = "cliente.html";
+                    }
+                } else {
+                    alert("Usuario inactivo, contacte al administrador.");
+                }
+            } else {
+                alert("Usuario o contraseña incorrectos.");
+            }
+        }
+
+        function showRegister() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("registerForm").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("registerForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+        }
+
+        function register() {
+            const username = document.getElementById("newUsername").value;
+            const password = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (!username || !password || !confirmPassword) {
+                alert("Por favor, complete todos los campos.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden.");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres.");
+                return;
+            }
+
+            users.push({ username, password, role: "user", active: true });
+            alert("Usuario creado exitosamente.");
+            showLogin();
+        }
+    </script>
+</body>
+</html>
