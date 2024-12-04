@@ -1,56 +1,82 @@
--- Procedimiento para crear un cliente
-CREATE OR REPLACE PROCEDURE sp_create_cliente (
-    p_nombre VARCHAR2,
-    p_apellido VARCHAR2,
-    p_email VARCHAR2,
-    p_direccion VARCHAR2,
-    p_telefono VARCHAR2
-) AS
-BEGIN
-    INSERT INTO CLIENTES (NOMBRE, APELLIDO, EMAIL, DIRECCION, TELEFONO)
-    VALUES (p_nombre, p_apellido, p_email, p_direccion, p_telefono);
-END;
-/
+function createCliente($nombre, $apellido, $email, $direccion, $telefono) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
--- Procedimiento para leer clientes
-CREATE OR REPLACE PROCEDURE sp_get_cliente (
-    p_id_cliente NUMBER,
-    p_nombre OUT VARCHAR2,
-    p_apellido OUT VARCHAR2,
-    p_email OUT VARCHAR2,
-    p_direccion OUT VARCHAR2,
-    p_telefono OUT VARCHAR2
-) AS
-BEGIN
-    SELECT NOMBRE, APELLIDO, EMAIL, DIRECCION, TELEFONO
-    INTO p_nombre, p_apellido, p_email, p_direccion, p_telefono
-    FROM CLIENTES
-    WHERE ID_CLIENTE = p_id_cliente;
-END;
-/
+        $sql = "INSERT INTO CLIENTES (NOMBRE, APELLIDO, EMAIL, DIRECCION, TELEFONO) VALUES (:nombre, :apellido, :email, :direccion, :telefono)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':telefono', $telefono);
 
--- Procedimiento para actualizar un cliente
-CREATE OR REPLACE PROCEDURE sp_update_cliente (
-    p_id_cliente NUMBER,
-    p_nombre VARCHAR2,
-    p_apellido VARCHAR2,
-    p_email VARCHAR2,
-    p_direccion VARCHAR2,
-    p_telefono VARCHAR2
-) AS
-BEGIN
-    UPDATE CLIENTES
-    SET NOMBRE = p_nombre, APELLIDO = p_apellido, EMAIL = p_email,
-        DIRECCION = p_direccion, TELEFONO = p_telefono
-    WHERE ID_CLIENTE = p_id_cliente;
-END;
-/
+        $stmt->execute();
+        echo "Cliente creado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
--- Procedimiento para eliminar un cliente
-CREATE OR REPLACE PROCEDURE sp_delete_cliente (
-    p_id_cliente NUMBER
-) AS
-BEGIN
-    DELETE FROM CLIENTES WHERE ID_CLIENTE = p_id_cliente;
-END;
-/
+
+function getCliente($id_cliente) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "SELECT NOMBRE, APELLIDO, EMAIL, DIRECCION, TELEFONO FROM CLIENTES WHERE ID_CLIENTE = :id_cliente";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result; // Retorna un array con los datos del cliente
+        } else {
+            return null; // No se encontró el cliente
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+
+function updateCliente($id_cliente, $nombre, $apellido, $email, $direccion, $telefono) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "UPDATE CLIENTES SET NOMBRE = :nombre, APELLIDO = :apellido, EMAIL = :email, DIRECCION = :direccion, TELEFONO = :telefono WHERE ID_CLIENTE = :id_cliente";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':telefono', $telefono);
+
+        $stmt->execute();
+        echo "Cliente actualizado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function deleteCliente($id_cliente) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "DELETE FROM CLIENTES WHERE ID_CLIENTE = :id_cliente";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+
+        $stmt->execute();
+        echo "Cliente eliminado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+

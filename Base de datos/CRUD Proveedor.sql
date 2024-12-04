@@ -1,53 +1,79 @@
--- Crear proveedor
-CREATE OR REPLACE PROCEDURE sp_create_proveedor (
-    p_nombre VARCHAR2,
-    p_contacto VARCHAR2,
-    p_telefono VARCHAR2,
-    p_direccion VARCHAR2
-) AS
-BEGIN
-    INSERT INTO PROVEEDORES (NOMBRE, CONTACTO, TELEFONO, DIRECCION)
-    VALUES (p_nombre, p_contacto, p_telefono, p_direccion);
-END sp_create_proveedor;
-/
+function createProveedor($nombre, $contacto, $telefono, $direccion) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
--- Leer proveedor
-CREATE OR REPLACE PROCEDURE sp_get_proveedor (
-    p_id_proveedor NUMBER,
-    p_nombre OUT VARCHAR2,
-    p_contacto OUT VARCHAR2,
-    p_telefono OUT VARCHAR2,
-    p_direccion OUT VARCHAR2
-) AS
-BEGIN
-    SELECT NOMBRE, CONTACTO, TELEFONO, DIRECCION
-    INTO p_nombre, p_contacto, p_telefono, p_direccion
-    FROM PROVEEDORES
-    WHERE ID_PROVEEDOR = p_id_proveedor;
-END sp_get_proveedor;
-/
+        $sql = "INSERT INTO PROVEEDORES (NOMBRE, CONTACTO, TELEFONO, DIRECCION) VALUES (:nombre, :contacto, :telefono, :direccion)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':contacto', $contacto);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':direccion', $direccion);
 
--- Actualizar proveedor
-CREATE OR REPLACE PROCEDURE sp_update_proveedor (
-    p_id_proveedor NUMBER,
-    p_nombre VARCHAR2,
-    p_contacto VARCHAR2,
-    p_telefono VARCHAR2,
-    p_direccion VARCHAR2
-) AS
-BEGIN
-    UPDATE PROVEEDORES
-    SET NOMBRE = p_nombre, CONTACTO = p_contacto, TELEFONO = p_telefono, 
-        DIRECCION = p_direccion
-    WHERE ID_PROVEEDOR = p_id_proveedor;
-END sp_update_proveedor;
-/
+        $stmt->execute();
+        echo "Proveedor creado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
--- Eliminar proveedor
-CREATE OR REPLACE PROCEDURE sp_delete_proveedor (
-    p_id_proveedor NUMBER
-) AS
-BEGIN
-    DELETE FROM PROVEEDORES WHERE ID_PROVEEDOR = p_id_proveedor;
-END sp_delete_proveedor;
-/
+
+function getProveedor($id_proveedor) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "SELECT NOMBRE, CONTACTO, TELEFONO, DIRECCION FROM PROVEEDORES WHERE ID_PROVEEDOR = :id_proveedor";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_proveedor', $id_proveedor);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result; // Retorna un array con los datos del proveedor
+        } else {
+            return null; // No se encontró el proveedor
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function updateProveedor($id_proveedor, $nombre, $contacto, $telefono, $direccion) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "UPDATE PROVEEDORES SET NOMBRE = :nombre, CONTACTO = :contacto, TELEFONO = :telefono, DIRECCION = :direccion WHERE ID_PROVEEDOR = :id_proveedor";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_proveedor', $id_proveedor);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':contacto', $contacto);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':direccion', $direccion);
+
+        $stmt->execute();
+        echo "Proveedor actualizado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function deleteProveedor($id_proveedor) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "DELETE FROM PROVEEDORES WHERE ID_PROVEEDOR = :id_proveedor";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_proveedor', $id_proveedor);
+
+        $stmt->execute();
+        echo "Proveedor eliminado con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+

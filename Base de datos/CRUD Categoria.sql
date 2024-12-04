@@ -1,46 +1,74 @@
--- Crear categoría
-CREATE OR REPLACE PROCEDURE sp_create_categoria (
-    p_nombre_categoria VARCHAR2,
-    p_descripcion VARCHAR2
-) AS
-BEGIN
-    INSERT INTO CATEGORIAS (NOMBRE_CATEGORIA, DESCRIPCION)
-    VALUES (p_nombre_categoria, p_descripcion);
-END sp_create_categoria;
-/
+function createCategoria($nombre_categoria, $descripcion) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
--- Leer categoría
-CREATE OR REPLACE PROCEDURE sp_get_categoria (
-    p_id_categoria NUMBER,
-    p_nombre_categoria OUT VARCHAR2,
-    p_descripcion OUT VARCHAR2
-) AS
-BEGIN
-    SELECT NOMBRE_CATEGORIA, DESCRIPCION
-    INTO p_nombre_categoria, p_descripcion
-    FROM CATEGORIAS
-    WHERE ID_CATEGORIA = p_id_categoria;
-END sp_get_categoria;
-/
+        $sql = "INSERT INTO CATEGORIAS (NOMBRE_CATEGORIA, DESCRIPCION) VALUES (:nombre_categoria, :descripcion)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':nombre_categoria', $nombre_categoria);
+        $stmt->bindParam(':descripcion', $descripcion);
 
--- Actualizar categoría
-CREATE OR REPLACE PROCEDURE sp_update_categoria (
-    p_id_categoria NUMBER,
-    p_nombre_categoria VARCHAR2,
-    p_descripcion VARCHAR2
-) AS
-BEGIN
-    UPDATE CATEGORIAS
-    SET NOMBRE_CATEGORIA = p_nombre_categoria, DESCRIPCION = p_descripcion
-    WHERE ID_CATEGORIA = p_id_categoria;
-END sp_update_categoria;
-/
+        $stmt->execute();
+        echo "Categoría creada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
--- Eliminar categoría
-CREATE OR REPLACE PROCEDURE sp_delete_categoria (
-    p_id_categoria NUMBER
-) AS
-BEGIN
-    DELETE FROM CATEGORIAS WHERE ID_CATEGORIA = p_id_categoria;
-END sp_delete_categoria;
-/
+
+function getCategoria($id_categoria) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "SELECT NOMBRE_CATEGORIA, DESCRIPCION FROM CATEGORIAS WHERE ID_CATEGORIA = :id_categoria";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_categoria', $id_categoria);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result; // Retorna un array con los datos de la categoría
+        } else {
+            return null; // No se encontró la categoría
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function updateCategoria($id_categoria, $nombre_categoria, $descripcion) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "UPDATE CATEGORIAS SET NOMBRE_CATEGORIA = :nombre_categoria, DESCRIPCION = :descripcion WHERE ID_CATEGORIA = :id_categoria";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_categoria', $id_categoria);
+        $stmt->bindParam(':nombre_categoria', $nombre_categoria);
+        $stmt->bindParam(':descripcion', $descripcion);
+
+        $stmt->execute();
+        echo "Categoría actualizada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function deleteCategoria($id_categoria) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "DELETE FROM CATEGORIAS WHERE ID_CATEGORIA = :id_categoria";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_categoria', $id_categoria);
+
+        $stmt->execute();
+        echo "Categoría eliminada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}

@@ -1,49 +1,77 @@
--- Crear sucursal
-CREATE OR REPLACE PROCEDURE sp_create_sucursal (
-    p_nombre VARCHAR2,
-    p_direccion VARCHAR2,
-    p_telefono VARCHAR2
-) AS
-BEGIN
-    INSERT INTO SUCURSALES (NOMBRE, DIRECCION, TELEFONO)
-    VALUES (p_nombre, p_direccion, p_telefono);
-END sp_create_sucursal;
-/
+function createSucursal($nombre, $direccion, $telefono) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
--- Leer sucursal
-CREATE OR REPLACE PROCEDURE sp_get_sucursal (
-    p_id_sucursal NUMBER,
-    p_nombre OUT VARCHAR2,
-    p_direccion OUT VARCHAR2,
-    p_telefono OUT VARCHAR2
-) AS
-BEGIN
-    SELECT NOMBRE, DIRECCION, TELEFONO
-    INTO p_nombre, p_direccion, p_telefono
-    FROM SUCURSALES
-    WHERE ID_SUCURSAL = p_id_sucursal;
-END sp_get_sucursal;
-/
+        $sql = "INSERT INTO SUCURSALES (NOMBRE, DIRECCION, TELEFONO) VALUES (:nombre, :direccion, :telefono)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':telefono', $telefono);
 
--- Actualizar sucursal
-CREATE OR REPLACE PROCEDURE sp_update_sucursal (
-    p_id_sucursal NUMBER,
-    p_nombre VARCHAR2,
-    p_direccion VARCHAR2,
-    p_telefono VARCHAR2
-) AS
-BEGIN
-    UPDATE SUCURSALES
-    SET NOMBRE = p_nombre, DIRECCION = p_direccion, TELEFONO = p_telefono
-    WHERE ID_SUCURSAL = p_id_sucursal;
-END sp_update_sucursal;
-/
+        $stmt->execute();
+        echo "Sucursal creada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
--- Eliminar sucursal
-CREATE OR REPLACE PROCEDURE sp_delete_sucursal (
-    p_id_sucursal NUMBER
-) AS
-BEGIN
-    DELETE FROM SUCURSALES WHERE ID_SUCURSAL = p_id_sucursal;
-END sp_delete_sucursal;
-/
+
+function getSucursal($id_sucursal) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "SELECT NOMBRE, DIRECCION, TELEFONO FROM SUCURSALES WHERE ID_SUCURSAL = :id_sucursal";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_sucursal', $id_sucursal);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result; // Retorna un array con los datos de la sucursal
+        } else {
+            return null; // No se encontró la sucursal
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function updateSucursal($id_sucursal, $nombre, $direccion, $telefono) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "UPDATE SUCURSALES SET NOMBRE = :nombre, DIRECCION = :direccion, TELEFONO = :telefono WHERE ID_SUCURSAL = :id_sucursal";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_sucursal', $id_sucursal);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':telefono', $telefono);
+
+        $stmt->execute();
+        echo "Sucursal actualizada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+function deleteSucursal($id_sucursal) {
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=nombre_base_de_datos", "usuario", "contraseña");
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "DELETE FROM SUCURSALES WHERE ID_SUCURSAL = :id_sucursal";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id_sucursal', $id_sucursal);
+
+        $stmt->execute();
+        echo "Sucursal eliminada con éxito!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
