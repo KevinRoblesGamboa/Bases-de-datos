@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente - Tienda Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        .option {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .logout {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .logout button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Bienvenido, Cliente</h1>
+    </div>
+    <div class="container">
+        <div class="option" onclick="viewProducts()">Ver productos</div>
+        <div class="option" onclick="viewCart()">Ver carrito</div>
+        <div class="option" onclick="viewOrders()">Consultar pedidos</div>
+    </div>
+    <div class="logout">
+        <button onclick="logout()">Cerrar sesión</button>
+    </div>
+
+    <script>
+        function viewProducts() {
+            alert("Redirigiendo a la página de productos...");
+            // Aquí puedes agregar redirección o lógica para mostrar productos
+        }
+
+        function viewCart() {
+            alert("Redirigiendo al carrito de compras...");
+            // Aquí puedes agregar redirección o lógica para mostrar el carrito
+        }
+
+        function viewOrders() {
+            alert("Mostrando tus pedidos...");
+            // Aquí puedes agregar redirección o lógica para mostrar los pedidos del cliente
+        }
+
+        function logout() {
+            alert("Has cerrado sesión.");
+            // Redirige a la página de inicio de sesión
+            window.location.href = "Inicio.html";
+        }
+    </script>
+</body>
+</html>
+
