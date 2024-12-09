@@ -39,30 +39,60 @@
             margin-top: 20px;
             color: red;
         }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1 style="text-align: center;">Lista de Empleados</h1>
     <div class="mensaje">
     <?php
-// Configuración de la conexión a la base de datos
-$host = 'localhost';
-$puerto = '1521'; // Cambia si usas un puerto diferente
-$sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'c##ANDERSON'; // Usuario de la base de datos
-$contraseña = '12345'; // Contraseña del usuario
+    // Configuración de la conexión a la base de datos
+    $host = 'localhost';
+    $puerto = '1521'; // Cambia si usas un puerto diferente
+    $sid = 'ORCL'; // SID de la base de datos Oracle
+    $usuario = 'c##selbor'; // Usuario de la base de datos
+    $contraseña = '12345'; // Contraseña del usuario
 
-// Crear la conexión
-$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+    // Crear la conexión
+    $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
-if ($conn) {
-    echo "<p class='success'>Conexión a la base de datos realizada con éxito.</p>";
-} else {
-    $e = oci_error();
-    echo "<p class='error'>Error al conectar con la base de datos: " . htmlentities($e['message']) . "</p>";
-    exit;
-}
-?>
+    if ($conn) {
+        echo "<p class='success'>Conexión a la base de datos realizada con éxito.</p>";
+    } else {
+        $e = oci_error();
+        echo "<p class='error'>Error al conectar con la base de datos: " . htmlentities($e['message']) . "</p>";
+        exit;
+    }
+
+    // Manejar eliminación de empleado si se recibe un ID para borrar
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_empleado']) && isset($_POST['action'])) {
+        $id_empleado = $_POST['id_empleado'];
+        $action = $_POST['action'];
+
+        if ($action === 'delete') {
+            // Llamar al procedimiento almacenado para eliminar empleado
+            $stid = oci_parse($conn, 'BEGIN sp_delete_empleado(:id_empleado); END;');
+            oci_bind_by_name($stid, ':id_empleado', $id_empleado);
+
+            if (oci_execute($stid)) {
+                echo "<p class='mensaje'>Empleado con ID $id_empleado eliminado correctamente.</p>";
+            } else {
+                $e = oci_error($stid);
+                echo "<p class='error'>Error al eliminar el empleado: " . htmlentities($e['message']) . "</p>";
+            }
+
+            oci_free_statement($stid);
+        }
+    }
+    ?>
     </div>
     <table>
         <thead>
@@ -72,6 +102,7 @@ if ($conn) {
                 <th>Apellido</th>
                 <th>Teléfono</th>
                 <th>ID Sucursal</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -82,7 +113,7 @@ if ($conn) {
 
             if (!oci_execute($stid)) {
                 $e = oci_error($stid);
-                echo "<tr><td colspan='5'>Error en la consulta: " . htmlentities($e['message']) . "</td></tr>";
+                echo "<tr><td colspan='6'>Error en la consulta: " . htmlentities($e['message']) . "</td></tr>";
                 oci_close($conn);
                 exit;
             }
@@ -95,6 +126,17 @@ if ($conn) {
                 echo "<td>" . htmlspecialchars($row['APELLIDO']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['TELEFONO']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['ID_SUCURSAL']) . "</td>";
+                echo "<td class='action-buttons'>";
+                echo "<form method='POST' style='display:inline;'>";
+                echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
+                echo "<input type='hidden' name='action' value='delete'>";
+                echo "<button type='submit'>Eliminar</button>";
+                echo "</form>";
+                echo "<form method='GET' action='actualizar_empleado.php' style='display:inline;'>";
+                echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
+                echo "<button type='submit'>Actualizar</button>";
+                echo "</form>";
+                echo "</td>";
                 echo "</tr>";
             }
 

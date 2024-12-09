@@ -51,7 +51,7 @@
 $host = 'localhost';
 $puerto = '1521'; // Cambia si usas un puerto diferente
 $sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'c##ANDERSON'; // Usuario de la base de datos
+$usuario = 'c##selbor'; // Usuario de la base de datos
 $contraseña = '12345'; // Contraseña del usuario
 
 // Crear la conexión
