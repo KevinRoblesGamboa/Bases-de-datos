@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barra de Navegación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            overflow: hidden;
+            background-color: #4CAF50; /* Color verde */
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover, .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+        .dropdown .dropbtn {
+            font-size: 16px;  
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="../Bases-de-datos/navbar.html">Inicio</a> <!-- Botón de Inicio -->
+        <div class="dropdown">
+          <button class="dropbtn">Clientes 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="../Bases-de-datos/Cliente/insertar_clientes.php">Insertar Clientes</a>
+            <a href="../Bases-de-datos/Cliente/mostrar_clientes.php">Mostrar Clientes</a>
+          </div>
+        </div> 
+        <div class="dropdown">
+          <button class="dropbtn">Empleados 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="../Bases-de-datos/Empleado/insertar_empleados.php">Insertar Empleados</a>
+            <a href="../Bases-de-datos/Empleado/mostrar_empleados.php">Mostrar Empleados</a>
+          </div>
+        </div> 
+        <div class="dropdown">
+          <button class="dropbtn">Productos 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="insertar.php">Insertar Productos</a>
+            <a href="mostrar.php">Mostrar Productos</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropbtn">Sucursales 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="insertar.php">Insertar Sucursales</a>
+            <a href="mostrar.php">Mostrar Sucursales</a>
+          </div>
+        </div> 
+        <div class="dropdown">
+          <button class="dropbtn">Proveedores 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="insertar.php">Insertar Proveedores</a>
+            <a href="mostrar.php">Mostrar Proveedores</a>
+          </div>
+        </div>
+      </div>
+      
+
+
+
+</body>
+</html>
