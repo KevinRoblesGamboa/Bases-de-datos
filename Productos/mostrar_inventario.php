@@ -3,7 +3,7 @@
 $host = 'localhost';
 $puerto = '1521';
 $sid = 'ORCL';
-$usuario = 'c##selbor';
+$usuario = 'c##ANDERSON';
 $contraseña = '12345';
 
 // Crear la conexión
@@ -20,7 +20,7 @@ if (isset($_POST['eliminar'])) {
     $id_inventario = $_POST['id_inventario'];
 
     // Preparar la consulta de eliminación
-    $query = "DELETE FROM INVENTARIO WHERE ID_INVENTARIO = :id_inventario";
+    $query = "BEGIN SP_DELETE_INVENTARIO(:id_inventario); END;";
     $stid = oci_parse($conn, $query);
 
     // Enlazar el parámetro
@@ -128,8 +128,8 @@ while ($row = oci_fetch_assoc($p_cursor)) {
                     <input type='submit' name='eliminar' value='Eliminar' onclick='return confirm(\"¿Estás seguro de que quieres eliminar este registro?\")'>
                 </form>
                 <!-- Botón de Actualizar -->
-                <form method='GET' action='form_actualizar_inventario.php'>
-                    <input type='hidden' name='id_inventario' value='" . htmlspecialchars($row['ID_INVENTARIO']) . "'>
+                <form method='GET' action='actualizar_producto.php'>
+                    <input type='hidden' name='id_producto' value='" . htmlspecialchars($row['ID_PRODUCTO']) . "'>
                     <input type='submit' value='Actualizar'>
                 </form>
             </td>
@@ -137,6 +137,11 @@ while ($row = oci_fetch_assoc($p_cursor)) {
 }
 
 echo "</table>";
+
+// Botón para ver sucursales con productos
+echo "<form method='GET' action='mostrar_sucursales_productos.php'>
+        <input type='submit' value='Mostrar Sucursales con Productos'>
+      </form>";
 
 // Liberar recursos
 oci_free_statement($stid);

@@ -4,48 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mostrar Sucursales</title>
-    <style>
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            padding: 5px 10px;
-            text-decoration: none;
-            color: white;
-            border-radius: 4px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .btn-update {
-            background-color: #4CAF50;
-        }
-        .btn-update:hover {
-            background-color: #45a049;
-        }
-        .btn-delete {
-            background-color: #f44336;
-        }
-        .btn-delete:hover {
-            background-color: #e53935;
-        }
+    <!-- Opciones de estilos básicos -->
+<style>
+    table {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+    form {
+        display: inline;
+    }
+    input[type="submit"] {
+        padding: 5px 10px;
+        margin: 2px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .success {
+        text-align: center;
+        color: green;
+        font-weight: bold;
+    }
+    .error {
+        text-align: center;
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
     </style>
 </head>
 <body>
@@ -128,5 +129,7 @@
     // Cerrar la conexión
     oci_close($conn);
     ?>
+
+    
 </body>
 </html>

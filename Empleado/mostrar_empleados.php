@@ -58,7 +58,7 @@
     $host = 'localhost';
     $puerto = '1521'; // Cambia si usas un puerto diferente
     $sid = 'ORCL'; // SID de la base de datos Oracle
-    $usuario = 'c##selbor'; // Usuario de la base de datos
+    $usuario = 'c##ANDERSON'; // Usuario de la base de datos
     $contraseña = '12345'; // Contraseña del usuario
 
     // Crear la conexión
@@ -92,10 +92,20 @@
             oci_free_statement($stid);
         }
     }
-    ?>
-    </div>
-    <table>
-        <thead>
+
+    // Consultar los datos de la tabla EMPLEADOS
+    $query = 'SELECT ID_EMPLEADO, NOMBRE, APELLIDO, TELEFONO, ID_SUCURSAL FROM EMPLEADOS';
+    $stid = oci_parse($conn, $query);
+
+    if (!oci_execute($stid)) {
+        $e = oci_error($stid);
+        echo "<tr><td colspan='6'>Error en la consulta: " . htmlentities($e['message']) . "</td></tr>";
+        oci_close($conn);
+        exit;
+    }
+
+    echo "<table>";
+    echo "<thead>
             <tr>
                 <th>ID Empleado</th>
                 <th>Nombre</th>
@@ -104,47 +114,47 @@
                 <th>ID Sucursal</th>
                 <th>Acciones</th>
             </tr>
-        </thead>
-        <tbody>
-            <?php
-            // Consultar los datos de la tabla EMPLEADOS
-            $query = 'SELECT ID_EMPLEADO, NOMBRE, APELLIDO, TELEFONO, ID_SUCURSAL FROM EMPLEADOS';
-            $stid = oci_parse($conn, $query);
+          </thead>
+          <tbody>";
 
-            if (!oci_execute($stid)) {
-                $e = oci_error($stid);
-                echo "<tr><td colspan='6'>Error en la consulta: " . htmlentities($e['message']) . "</td></tr>";
-                oci_close($conn);
-                exit;
-            }
+    // Iterar sobre los resultados
+    while ($row = oci_fetch_assoc($stid)) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row['ID_EMPLEADO']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['NOMBRE']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['APELLIDO']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['TELEFONO']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['ID_SUCURSAL']) . "</td>";
+        echo "<td class='action-buttons'>";
+        echo "<form method='POST' style='display:inline;'>";
+        echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
+        echo "<input type='hidden' name='action' value='delete'>";
+        echo "<button type='submit'>Eliminar</button>";
+        echo "</form>";
+        echo "<form method='GET' action='actualizar_empleado.php' style='display:inline;'>";
+        echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
+        echo "<button type='submit'>Actualizar</button>";
+        echo "</form>";
+        echo "</td>";
+        echo "</tr>";
+    }
 
-            // Iterar sobre los resultados
-            while ($row = oci_fetch_assoc($stid)) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($row['ID_EMPLEADO']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['NOMBRE']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['APELLIDO']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['TELEFONO']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['ID_SUCURSAL']) . "</td>";
-                echo "<td class='action-buttons'>";
-                echo "<form method='POST' style='display:inline;'>";
-                echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
-                echo "<input type='hidden' name='action' value='delete'>";
-                echo "<button type='submit'>Eliminar</button>";
-                echo "</form>";
-                echo "<form method='GET' action='actualizar_empleado.php' style='display:inline;'>";
-                echo "<input type='hidden' name='id_empleado' value='" . htmlspecialchars($row['ID_EMPLEADO']) . "'>";
-                echo "<button type='submit'>Actualizar</button>";
-                echo "</form>";
-                echo "</td>";
-                echo "</tr>";
-            }
+    echo "</tbody></table>";
 
-            // Liberar recursos y cerrar conexión
-            oci_free_statement($stid);
-            oci_close($conn);
-            ?>
-        </tbody>
-    </table>
+    // Obtener el total de empleados
+    $query_total_empleados = 'SELECT FN_TOTAL_EMPLEADOS() AS TOTAL_EMPLEADOS FROM DUAL';
+    $stid_total = oci_parse($conn, $query_total_empleados);
+    oci_execute($stid_total);
+    $row_total = oci_fetch_assoc($stid_total);
+    $total_empleados = $row_total['TOTAL_EMPLEADOS'];
+
+    echo "<p>Empleados totales = " . htmlspecialchars($total_empleados) . "</p>";
+
+    // Liberar recursos y cerrar conexión
+    oci_free_statement($stid);
+    oci_free_statement($stid_total);
+    oci_close($conn);
+    ?>
+    </div>
 </body>
 </html>

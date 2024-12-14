@@ -45,6 +45,12 @@
         .btn-delete:hover {
             background-color: #e53935;
         }
+        .total-proveedores {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: blue; /* Ajusta el color según sea necesario */
+        }
     </style>
 </head>
 <body>
@@ -96,6 +102,15 @@
         }
 
         echo "</table>";
+
+        // Obtener el total de proveedores
+        $query_total_proveedores = 'SELECT FN_TOTAL_PROVEEDORES() AS TOTAL_PROVEEDORES FROM DUAL';
+        $stid_total = oci_parse($conn, $query_total_proveedores);
+        oci_execute($stid_total);
+        $row_total = oci_fetch_assoc($stid_total);
+        $total_proveedores = $row_total['TOTAL_PROVEEDORES'];
+
+        echo "<p class='total-proveedores'>Total de proveedores: " . htmlspecialchars($total_proveedores) . "</p>";
     } else {
         $e = oci_error($stid);
         echo "<p class='error'>Error al obtener la lista de proveedores: " . htmlentities($e['message']) . "</p>";

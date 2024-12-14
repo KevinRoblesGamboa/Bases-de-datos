@@ -1,12 +1,10 @@
 <?php
-// Conexión a la base de datos
-
 // Configuración de la conexión a la base de datos
 $host = 'localhost';
-$puerto = '1521'; // Cambia si usas un puerto diferente
-$sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'c##ANDERSON'; // Usuario de la base de datos
-$contraseña = '12345'; // Contraseña del usuario
+$puerto = '1521';
+$sid = 'ORCL';
+$usuario = 'c##ANDERSON';
+$contraseña = '12345';
 
 // Crear la conexión
 $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
@@ -61,11 +59,23 @@ if (oci_execute($stid) && oci_execute($cursor)) {
         echo "</tr>";
     }
 
+    // Obtener el total de clientes
+    $query_total_clientes = 'SELECT FN_TOTAL_CLIENTES() AS TOTAL_CLIENTES FROM DUAL';
+    $stid_total = oci_parse($conn, $query_total_clientes);
+    oci_execute($stid_total);
+    $row_total = oci_fetch_assoc($stid_total);
+    $total_clientes = $row_total['TOTAL_CLIENTES'];
+
     echo "</table>";
 } else {
     $e = oci_error($stid);
     echo "Error al recuperar los clientes: " . htmlentities($e['message']);
 }
+
+// Mostrar el total de clientes al final de la página
+echo "<div style='text-align: center; margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;'>";
+echo "Clientes totales = " . htmlspecialchars($total_clientes);
+echo "</div>";
 
 // Procesar acción de actualización
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
@@ -134,5 +144,15 @@ oci_free_statement($cursor);
     }
     input[type="submit"]:hover {
         background-color: #45a049;
-    }
+    }
+    .success {
+        text-align: center;
+        color: green;
+        font-weight: bold;
+    }
+    .error {
+        text-align: center;
+        color: red;
+        font-weight: bold;
+    }
 </style>
