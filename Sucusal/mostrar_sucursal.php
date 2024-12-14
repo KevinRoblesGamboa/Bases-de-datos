@@ -4,53 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mostrar Sucursales</title>
-    <!-- Opciones de estilos básicos -->
-<style>
-    table {
-        border: 1px solid #ddd;
-    }
-    th, td {
-        padding: 10px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
-    th {
-        background-color: #4CAF50;
-        color: white;
-    }
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-    form {
-        display: inline;
-    }
-    input[type="submit"] {
-        padding: 5px 10px;
-        margin: 2px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-    input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-    .success {
-        text-align: center;
-        color: green;
-        font-weight: bold;
-    }
-    .error {
-        text-align: center;
-        color: red;
-        font-weight: bold;
-    }
-</style>
-
+    <!-- Opciones de estilos avanzados -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .actions {
+            text-align: center;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 2px;
+            border-radius: 4px;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        .btn-update {
+            background-color: #3498db;
+        }
+        .btn-update:hover {
+            background-color: #2980b9;
+        }
+        .redirect-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .redirect-button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            width: 60%;
+            margin: 10px auto;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Lista de Sucursales</h1>
+    <h1>Lista de Sucursales</h1>
 
     <?php
     // Configuración de la conexión a la base de datos
@@ -65,7 +107,7 @@
 
     if (!$conn) {
         $e = oci_error();
-        echo "<p class='error'>Error al conectar con la base de datos: " . htmlentities($e['message']) . "</p>";
+        echo "<div class='message error'>Error al conectar con la base de datos: " . htmlentities($e['message']) . "</div>";
         exit;
     }
 
@@ -77,10 +119,10 @@
         oci_bind_by_name($delete_stid, ':id_sucursal', $id_sucursal);
 
         if (oci_execute($delete_stid)) {
-            echo "<p style='color: green; text-align: center;'>Sucursal con ID $id_sucursal eliminada correctamente.</p>";
+            echo "<div class='message success'>Sucursal con ID $id_sucursal eliminada correctamente.</div>";
         } else {
             $e = oci_error($delete_stid);
-            echo "<p style='color: red; text-align: center;'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</p>";
+            echo "<div class='message error'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</div>";
         }
 
         oci_free_statement($delete_stid);
@@ -119,7 +161,7 @@
         echo "</table>";
     } else {
         $e = oci_error($stid);
-        echo "<p class='error'>Error al obtener la lista de sucursales: " . htmlentities($e['message']) . "</p>";
+        echo "<div class='message error'>Error al obtener la lista de sucursales: " . htmlentities($e['message']) . "</div>";
     }
 
     // Liberar recursos
@@ -130,6 +172,10 @@
     oci_close($conn);
     ?>
 
-    
+    <!-- Botones de redirección -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="verifica_empleados_sucursal.php" class="redirect-button">Verificar empleados por sucursal</a>
+        
+    </div>
 </body>
 </html>

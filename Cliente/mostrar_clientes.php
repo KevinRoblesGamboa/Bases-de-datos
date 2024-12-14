@@ -111,8 +111,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
 // Liberar recursos
 oci_free_statement($stid);
 oci_free_statement($cursor);
-
 ?>
+
+<!-- Botón de redirección -->
+<div style="text-align: center; margin-top: 20px;">
+    <a href="mostrar_ultimo_cliente.php" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Mostrar ultimo cliente ingresado</a>
+    <a href="verificar_telefono_cliente.php" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Verificar telefono ingresado</a>
+
+</div>
 
 <!-- Opciones de estilos básicos -->
 <style>

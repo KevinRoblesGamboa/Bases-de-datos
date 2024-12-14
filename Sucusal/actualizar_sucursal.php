@@ -28,20 +28,31 @@ if (isset($_GET['id_sucursal'])) {
     oci_execute($stid);
 
     ?>
-    <form method="POST">
-        <input type="hidden" name="id_sucursal" value="<?php echo $id_sucursal; ?>">
+    <div class="form-container">
+        <form method="POST">
+            <input type="hidden" name="id_sucursal" value="<?php echo $id_sucursal; ?>">
 
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>" required>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>" required>
+            </div>
 
-        <label for="direccion">Dirección:</label>
-        <textarea id="direccion" name="direccion" required><?php echo htmlspecialchars($direccion); ?></textarea>
+            <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <textarea id="direccion" name="direccion" required><?php echo htmlspecialchars($direccion); ?></textarea>
+            </div>
 
-        <label for="telefono">Teléfono:</label>
-        <input type="text" id="telefono" name="telefono" value="<?php echo htmlspecialchars($telefono); ?>" required>
+            <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" value="<?php echo htmlspecialchars($telefono); ?>" required>
+            </div>
 
-        <input type="submit" name="action" value="Actualizar">
-    </form>
+            <div class="form-group action-buttons">
+                <input type="submit" name="action" value="Actualizar" class="btn btn-primary">
+                <a href="mostrar_sucursal.php" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
     <?php
 
     oci_free_statement($stid);
@@ -70,7 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
         echo "<p class='message'>Sucursal actualizada con éxito.</p>";
         echo "<script>window.location.href='mostrar_sucursal.php';</script>";
     } else {
-        echo "<p class='error'>Error al actualizar la sucursal.</p>";
+        $e = oci_error($stid);
+        echo "<p class='error'>Error al actualizar la sucursal: " . htmlentities($e['message']) . "</p>";
     }
 
     oci_free_statement($stid);
@@ -78,49 +90,82 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
 
 oci_close($conn);
 ?>
-
 <style>
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
-            font-family: Arial, sans-serif;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .mensaje {
-            text-align: center;
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            margin-top: 20px;
-            color: green;
-        }
-        .error {
-            text-align: center;
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            margin-top: 20px;
-            color: red;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-        button {
-            padding: 5px 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-    </style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        max-width: 90%;
+        margin: 20px auto;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+    }
+    textarea {
+        resize: vertical;
+    }
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #ffffff;
+        border: none;
+    }
+    .message, .error {
+        text-align: center;
+        font-size: 16px;
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .message {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
