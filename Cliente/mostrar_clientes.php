@@ -1,4 +1,9 @@
 <?php
+include_once('../config.php'); // Configuración
+include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
+?>
+
+<?php
 // Configuración de la conexión a la base de datos
 $host = 'localhost';
 $puerto = '1521';
@@ -122,6 +127,7 @@ oci_free_statement($cursor);
 
 <!-- Opciones de estilos básicos -->
 <style>
+    
     table {
         border: 1px solid #ddd;
     }

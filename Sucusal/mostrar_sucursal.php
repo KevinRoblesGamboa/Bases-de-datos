@@ -1,3 +1,9 @@
+<?php
+include_once('../config.php'); // Configuración
+include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
