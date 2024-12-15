@@ -7,9 +7,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostrar Sucursales</title>
     <!-- Opciones de estilos avanzados -->
     <style>
         body {
@@ -95,10 +95,73 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
             background-color: #f8d7da;
             color: #721c24;
         }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>Lista de Sucursales</h1>
+
+    <?php
+        $usuario = $_SESSION['usuario'];
+        $rol = $_SESSION['rol']; // This could be 'admin', 'user', etc.
+
+        echo "Rol obtenido Cliente: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+        echo "Rol obtenido Cliente: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+
+        error_log("Usuario: " . $usuario);
+        error_log("Rol: " . $rol);
+    ?>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="https://www.instagram.com/gamba.store/?hl=es-la">Gamba Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Productos</a>
+            </li>
+            
+            <?php if ($rol == 'admin'): ?>
+            <!-- For Admin role, display Sucursales link -->
+            <li class="nav-item">
+                <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales 2</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Opciones
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Submenú 1</a></li>
+                <li><a class="dropdown-item" href="#">Submenú 2</a></li>
+                <li><a class="dropdown-item" href="#">Submenú 3</a></li>
+                </ul>
+            </li>
+            <?php elseif ($rol == 'cliente'): ?>
+            <!-- For User role, you can display different or fewer links -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Mis Pedidos</a>
+            </li>
+            <?php endif; ?>
+        </ul>
+        </div>
+        <div class="d-flex align-items-center">
+            <!-- Información de usuario -->
+            <span class="user-info me-3"><?php echo "Correo: $usuario"; ?></span>
+            <!-- Botón de salir -->
+            <a href="http://localhost/Bases-de-datos/login.php" class="btn logout-btn">Salir</a>
+        </div>
+    </div>
+    </nav>
+
+
 
     <?php
     // Configuración de la conexión a la base de datos
@@ -107,7 +170,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     $sid = 'ORCL'; // SID de la base de datos Oracle
     $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
     $contraseña = '1234567'; // Contraseña del usuario
-
+       
+    
+    
 
     // Crear la conexión
     $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
@@ -119,7 +184,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     }
 
     // Manejar eliminación de una sucursal
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_sucursal'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_sucursal'])) 
+    {
         $id_sucursal = $_POST['id_sucursal'];
 
         $delete_stid = oci_parse($conn, 'BEGIN SP_DELETE_SUCURSAL(:id_sucursal); END;');

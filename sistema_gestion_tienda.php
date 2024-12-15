@@ -115,7 +115,7 @@ $usuario = $_SESSION['usuario'];
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="#">Agregar Sucursales</a></li>
-            <li><a class="dropdown-item" href="#">Mostrar Sucursales</a></li>
+            <li><a class="dropdown-item" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Mostrar Sucursales</a></li>
             <li><a class="dropdown-item" href="#">Actualizar Sucursales</a></li>
           </ul>
         </li>
