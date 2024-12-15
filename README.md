@@ -1,5 +1,6 @@
 # Título del proyecto
-![Imagen del proyecto](https://github.com/eduardofierropro/Portafolio-y-CV/blob/main/IMAGEN-DEL-PROYECTO.jpg?raw=true)
+![image](https://github.com/user-attachments/assets/0936fc06-1ff9-413f-acd7-af1dca1d5884)
+
 
 ## Ejemplo en vivo
 - [URL-de-github-pages-de-este-proyecto](URL-de-github-pages-de-este-proyecto)
