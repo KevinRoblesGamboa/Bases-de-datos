@@ -1,4 +1,4 @@
-# Título del proyecto
+# Gamba Store
 ![image](https://github.com/user-attachments/assets/0936fc06-1ff9-413f-acd7-af1dca1d5884)
 
 
