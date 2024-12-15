@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-
-        // Obtener los datos del formulario
+    
+    // Obtener los datos del formulario
     $usuario = $_POST['usuario'];
     $password = $_POST['password'];
     $rol = '';  // Inicializamos el valor de $rol
