@@ -1,67 +1,150 @@
 <?php
 session_start();
+ob_start(); // Evitar problemas con header()
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Obtener los datos del formulario
+
+    $host = 'localhost';       // Cambia según tu configuración
+    $port = '1521';            // Puerto por defecto de Oracle
+    $service_name = 'ORCL';      // Nombre del servicio o SID de Oracle
+    $username = 'PROYECTOSC504';  // Usuario de la base de datos
+    $password = '1234567';
+    
+    // Crear la cadena de conexión
+    $dsn = "oci:dbname=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$host)(PORT=$port))(CONNECT_DATA=(SERVICE_NAME=$service_name)))";
+    try 
+    {
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo "Error de conexión: " . $e->getMessage();
+        exit;
+    }
+
+
+        // Obtener los datos del formulario
     $usuario = $_POST['usuario'];
     $password = $_POST['password'];
+    $rol = '';  // Inicializamos el valor de $rol
 
-    // Comprobar si el usuario es "admin"
-    if (strtolower($usuario) === 'admin') {
+    try {
+        // Llamado al SP
+        $stmt = $pdo->prepare("BEGIN OBTENER_ROL(:email, :contrasena, :rol); END;");
+        
+
+        // Vincular parámetros
+        $stmt->bindParam(':email', $usuario, PDO::PARAM_STR);
+        $stmt->bindParam(':contrasena', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':rol', $rol, PDO::PARAM_INPUT_OUTPUT, 50); // Usamos PDO::PARAM_INPUT_OUTPUT para el parámetro OUT
+
+        // Ejecutar el SP
+        $stmt->execute();
+
+        // Mostrar el rol obtenido
+        //echo "Rol obtenido: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        exit;
+    }
+
+    //echo "Rol obtenido2: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+
+    if (strtolower($rol) === '')
+    {
+        header('Location: login.php?error=acceso_denegado&rol=' . urlencode($rol));
+        exit;
+    }
+
+
+    // Verificar el valor de rol y redirigir según el caso
+    if (strtolower($rol) === 'admin')
+    {
         $_SESSION['usuario'] = $usuario;
         $_SESSION['rol'] = 'admin';
-        header('Location: sistema_gestion_tienda.php'); // Redirigir al sistema de gestión
-    } else {
+        header('Location: sistema_gestion_tienda.php');
+        exit;
+    } 
+    
+    
+    //echo "Rol obtenido3: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+    
+    // ----
+    //     
+    try 
+    {
+
+        // Llamado al SP
+        $stmt2 = $pdo->prepare("BEGIN OBTENER_ROL_CLIENTE(:email, :contrasena, :rol); END;"); // cambiar el sp ojojojojojo
+        
+        if (!$stmt2) 
+        {
+            die("Error en la preparación del SP: " . implode(", ", $pdo->errorInfo()));
+        }
+        // Vincular parámetros
+        $stmt2->bindParam(':email', $usuario, PDO::PARAM_STR);
+        $stmt2->bindParam(':contrasena', $password, PDO::PARAM_STR);
+        $stmt2->bindParam(':rol', $rol, PDO::PARAM_STR, 50); // Usamos PDO::PARAM_INPUT_OUTPUT para el parámetro OUT
+        // Ejecutar el SP
+        $stmt2->execute();
+
+        // Mostrar el rol obtenido
+        // echo "Rol obtenido Cliente: " . $usuario . "<br>";  // Mostrar el valor obtenido de la base de datos
+        // echo "Rol obtenido Cliente: " . $password . "<br>";  // Mostrar el valor obtenido de la base de datos
+        //echo "Rol obtenido Cliente: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        exit;
+    }
+
+    if (strtolower($rol) === 'example')
+    {
         $_SESSION['usuario'] = $usuario;
         $_SESSION['rol'] = 'cliente';
-        header('Location: sistema_clientes.php'); // Redirigir al sistema de clientes
-    }
-    exit;
+        header('Location: sistema_clientes.php');
+        exit;
+    } 
+    // ---------------------------------------------------------------------
+
+    // if (strtolower(trim($rol)) === 'Cliente') {
+    //     $_SESSION['usuario'] = $usuario;
+    //     $_SESSION['rol'] = 'Cliente';
+    //     echo "Rol obtenido3: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
+    //header('Location: ');
+
+
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
+    <title>Iniciar sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        form {
-            width: 300px;
-            margin: 50px auto;
+        body {
+            background-color: #f8f9fa;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        input[type="submit"], .btn-register {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .login-title {
+            font-size: 2rem;
             text-align: center;
-            text-decoration: none;
-            display: block;
-        }
-        input[type="submit"]:hover, .btn-register:hover {
-            background-color: #45a049;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Inicio de Sesión</h1>
+    <!-- <h1 style="text-align: center;">Inicio de Sesión</h1>
     <form method="POST">
         <label for="usuario">Usuario:</label>
         <input type="text" id="usuario" name="usuario" required>
@@ -69,6 +152,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input type="password" id="password" name="password" required>
         <input type="submit" value="Iniciar Sesión">
         <a href="insertar_cliente.php" class="btn-register">Registrar</a>
-    </form>
+    </form> -->
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="login-container">
+            <h1 class="login-title">Inicio de Sesión</h1>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="usuario" class="form-label">Usuario:</label>
+                    <input type="text" class="form-control" id="usuario" name="usuario" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="d-grid gap-2">
+                    <input type="submit" class="btn btn-success btn-block" value="Iniciar Sesión">
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <a href="insertar_cliente.php" class="btn btn-secondary">Registrar</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
