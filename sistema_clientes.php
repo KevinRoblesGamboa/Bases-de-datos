@@ -112,7 +112,7 @@ $usuario = $_SESSION['usuario'];
           <a class="nav-link active" href="#">Sucursales</a>
         </li> -->
         <li class="nav-item">
-            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales 2</a>
+            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales </a>
         </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

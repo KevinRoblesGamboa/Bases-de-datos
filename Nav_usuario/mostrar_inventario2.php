@@ -1,13 +1,13 @@
 <?php
-// Configuración de la conexión a la base de datos
-$host = 'localhost';
-$puerto = '1521';
-$sid = 'ORCL';
-$usuario = 'c##selbor';
-$contraseña = '12345';
-
-// Crear la conexión
-$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+  // Configuración de la conexión a la base de datos
+  $host = 'localhost';
+  $puerto = '1521'; // Cambia si usas un puerto diferente
+  $sid = 'ORCL'; // SID de la base de datos Oracle
+  $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+  $contraseña = '1234567'; // Contraseña del usuario
+  
+  // Crear la conexión
+  $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
 if (!$conn) {
     $e = oci_error();

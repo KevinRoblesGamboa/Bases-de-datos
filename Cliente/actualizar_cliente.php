@@ -5,12 +5,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
 
 
 <?php
-// Configuración de la conexión a la base de datos
+  // Configuración de la conexión a la base de datos
 $host = 'localhost';
 $puerto = '1521'; // Cambia si usas un puerto diferente
 $sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'c##ANDERSON'; // Usuario de la base de datos
-$contraseña = '12345'; // Contraseña del usuario
+$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+$contraseña = '1234567'; // Contraseña del usuario
 
 // Crear la conexión
 $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");

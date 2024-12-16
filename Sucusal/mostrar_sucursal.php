@@ -95,22 +95,33 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
             background-color: #f8d7da;
             color: #721c24;
         }
+        .message.warning {
+            background-color: #fff3cd; /* Amarillo claro */
+            color: #856404; /* Color del texto */
+            border: 1px solid #ffeeba; /* Borde amarillo suave */
+            padding: 10px; /* Espaciado interno */
+            margin: 10px auto; /* Centrado horizontal */
+            border-radius: 5px; /* Bordes redondeados */
+            font-family: Arial, sans-serif; /* Fuente opcional */
+            width: 50%; /* Ancho del mensaje */
+            text-align: center; /* Centrar el texto */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
+        }
     </style>
 </head>
 <body>
     <h1>Lista de Sucursales</h1>
 
     <?php
-    // Configuración de la conexión a la base de datos
-    $host = 'localhost';
-    $puerto = '1521'; // Cambia si usas un puerto diferente
-    $sid = 'ORCL'; // SID de la base de datos Oracle
-    $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
-    $contraseña = '1234567'; // Contraseña del usuario
+      // Configuración de la conexión a la base de datos
+$host = 'localhost';
+$puerto = '1521'; // Cambia si usas un puerto diferente
+$sid = 'ORCL'; // SID de la base de datos Oracle
+$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+$contraseña = '1234567'; // Contraseña del usuario
 
-
-    // Crear la conexión
-    $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+// Crear la conexión
+$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
     if (!$conn) {
         $e = oci_error();
@@ -122,17 +133,64 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_sucursal'])) {
         $id_sucursal = $_POST['id_sucursal'];
 
-        $delete_stid = oci_parse($conn, 'BEGIN SP_DELETE_SUCURSAL(:id_sucursal); END;');
-        oci_bind_by_name($delete_stid, ':id_sucursal', $id_sucursal);
+        // Preparar la consulta para verificar si la sucursal tiene empleados
+        $query = "SELECT COUNT(*) AS total FROM Empleados WHERE ID_SUCURSAL = :id_sucursal";
+        $stmt_total = oci_parse($conn, $query);
 
-        if (oci_execute($delete_stid)) {
-            echo "<div class='message success'>Sucursal con ID $id_sucursal eliminada correctamente.</div>";
-        } else {
-            $e = oci_error($delete_stid);
-            echo "<div class='message error'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</div>";
+        oci_bind_by_name($stmt_total, ':id_sucursal', $id_sucursal);
+
+        // Ejecutar la consulta
+        if (oci_execute($stmt_total)) 
+        {
+            // Recuperar el resultado
+            $row = oci_fetch_assoc($stmt_total);
+            $total_empleados = $row['TOTAL'];
+
+            // Validar si hay empleados en la sucursal
+            if ($total_empleados > 0) 
+            {
+                echo "<div class='message warning'>Sucursal con ID $id_sucursal tiene empleados asignados: $total_empleados.</div>";
+                //echo "La sucursal :" . htmlspecialchars($name_sucursal) . " tiene empleados asignados: " . $total_empleados . "<br>";
+            }
+            else 
+            {
+                $delete_stid = oci_parse($conn, 'BEGIN SP_DELETE_SUCURSAL(:id_sucursal); END;');
+                oci_bind_by_name($delete_stid, ':id_sucursal', $id_sucursal);
+        
+                if (oci_execute($delete_stid)) 
+                {
+                    echo "<div class='message success'>Sucursal con ID $id_sucursal eliminada correctamente.</div>";
+                } 
+                else 
+                {
+                    $e = oci_error($delete_stid);
+                    echo "<div class='message error'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</div>";
+                }    
+                oci_free_statement($delete_stid);
+            }
+        } 
+        else 
+        {
+            // Manejar errores en la consulta
+            $e = oci_error($stmt_total);
+            echo "Error al ejecutar la consulta: " . htmlentities($e['message']);
         }
 
-        oci_free_statement($delete_stid);
+        // Liberar recursos
+        oci_free_statement($stmt_total);
+
+
+        // $delete_stid = oci_parse($conn, 'BEGIN SP_DELETE_SUCURSAL(:id_sucursal); END;');
+        // oci_bind_by_name($delete_stid, ':id_sucursal', $id_sucursal);
+
+        // if (oci_execute($delete_stid)) {
+        //     echo "<div class='message success'>Sucursal con ID $id_sucursal eliminada correctamente.</div>";
+        // } else {
+        //     $e = oci_error($delete_stid);
+        //     echo "<div class='message error'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</div>";
+        // }
+
+        // oci_free_statement($delete_stid);
     }
 
     // Obtener la lista de sucursales

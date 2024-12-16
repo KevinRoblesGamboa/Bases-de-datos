@@ -5,7 +5,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     exit;
 }
 
-$usuario = $_SESSION['usuario'];
+$user = $_SESSION['usuario'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

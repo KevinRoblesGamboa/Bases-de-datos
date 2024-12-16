@@ -43,15 +43,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     <h1>Último Cliente Ingresado</h1>
 
     <?php
-    // Configuración de la conexión a la base de datos
-    $host = 'localhost';
-    $puerto = '1521';
-    $sid = 'ORCL';
-    $usuario = 'c##ANDERSON'; // Cambiar por tu usuario
-    $contraseña = '12345'; // Cambiar por tu contraseña
+      // Configuración de la conexión a la base de datos
+$host = 'localhost';
+$puerto = '1521'; // Cambia si usas un puerto diferente
+$sid = 'ORCL'; // SID de la base de datos Oracle
+$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+$contraseña = '1234567'; // Contraseña del usuario
 
-    // Conectar a la base de datos
-    $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+// Crear la conexión
+$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
     if (!$conn) {
         $e = oci_error();

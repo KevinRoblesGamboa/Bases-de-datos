@@ -1,13 +1,13 @@
 <?php
-// Configuración de la conexión a la base de datos
-$host = 'localhost';
-$puerto = '1521';
-$sid = 'ORCL';
-$usuario = 'c##ANDERSON';
-$contraseña = '12345';
-
-// Crear la conexión
-$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+  // Configuración de la conexión a la base de datos
+  $host = 'localhost';
+  $puerto = '1521'; // Cambia si usas un puerto diferente
+  $sid = 'ORCL'; // SID de la base de datos Oracle
+  $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+  $contraseña = '1234567'; // Contraseña del usuario
+  
+  // Crear la conexión
+  $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
 if (!$conn) {
     $e = oci_error();
@@ -65,9 +65,13 @@ for ($id_sucursal = 1; $id_sucursal <= 30; $id_sucursal++) {
     $sql_total = "BEGIN :total := FN_TOTAL_INVENTARIO_SUCURSAL(:id_sucursal); END;";
     $stmt_total = oci_parse($conn, $sql_total);
 
+
+
     // Declarar variables
     oci_bind_by_name($stmt_total, ':id_sucursal', $id_sucursal);
     oci_bind_by_name($stmt_total, ':total', $total_productos, 32);
+
+    echo "id: " . $id_sucursal . "<br>";  // Mostrar el valor obtenido de la base de datos
 
     // Ejecutar la función
     if (oci_execute($stmt_total)) {

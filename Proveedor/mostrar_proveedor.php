@@ -63,15 +63,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     <h1 style="text-align: center;">Lista de Proveedores</h1>
 
     <?php
-    // Configuración de la conexión a la base de datos
-    $host = 'localhost';
-    $puerto = '1521'; // Cambia si usas un puerto diferente
-    $sid = 'ORCL'; // SID de la base de datos Oracle
-    $usuario = 'c##ANDERSON'; // Usuario de la base de datos
-    $contraseña = '12345'; // Contraseña del usuario
+     // Configuración de la conexión a la base de datos
+$host = 'localhost';
+$puerto = '1521'; // Cambia si usas un puerto diferente
+$sid = 'ORCL'; // SID de la base de datos Oracle
+$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+$contraseña = '1234567'; // Contraseña del usuario
 
-    // Crear la conexión
-    $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+// Crear la conexión
+$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
     if (!$conn) {
         $e = oci_error();

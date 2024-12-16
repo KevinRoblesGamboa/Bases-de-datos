@@ -11,20 +11,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = 'PROYECTOSC504';  // Usuario de la base de datos
     $password = '1234567';
     
-    // Crear la cadena de conexión
-    $dsn = "oci:dbname=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$host)(PORT=$port))(CONNECT_DATA=(SERVICE_NAME=$service_name)))";
-    try 
-    {
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        echo "Error de conexión: " . $e->getMessage();
-        exit;
-    }
+     // Crear la cadena de conexión
+     $dsn = "oci:dbname=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$host)(PORT=$port))(CONNECT_DATA=(SERVICE_NAME=$service_name)))";
+     try 
+     {
+         $pdo = new PDO($dsn, $username, $password);
+         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+     } catch (PDOException $e) {
+         echo "Error de conexión: " . $e->getMessage();
+         exit;
+     }
 
     
     // Obtener los datos del formulario
-    $usuario = $_POST['usuario'];
+    $user = $_POST['usuario'];
     $password = $_POST['password'];
     $rol = '';  // Inicializamos el valor de $rol
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
 
         // Vincular parámetros
-        $stmt->bindParam(':email', $usuario, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $user, PDO::PARAM_STR);
         $stmt->bindParam(':contrasena', $password, PDO::PARAM_STR);
         $stmt->bindParam(':rol', $rol, PDO::PARAM_INPUT_OUTPUT, 50); // Usamos PDO::PARAM_INPUT_OUTPUT para el parámetro OUT
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Verificar el valor de rol y redirigir según el caso
     if (strtolower($rol) === 'admin')
     {
-        $_SESSION['usuario'] = $usuario;
+        $_SESSION['usuario'] = $user;
         $_SESSION['rol'] = 'admin';
         header('Location: sistema_gestion_tienda.php');
         exit;
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die("Error en la preparación del SP: " . implode(", ", $pdo->errorInfo()));
         }
         // Vincular parámetros
-        $stmt2->bindParam(':email', $usuario, PDO::PARAM_STR);
+        $stmt2->bindParam(':email', $user, PDO::PARAM_STR);
         $stmt2->bindParam(':contrasena', $password, PDO::PARAM_STR);
         $stmt2->bindParam(':rol', $rol, PDO::PARAM_STR, 50); // Usamos PDO::PARAM_INPUT_OUTPUT para el parámetro OUT
         // Ejecutar el SP
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (strtolower($rol) === 'example')
     {
-        $_SESSION['usuario'] = $usuario;
+        $_SESSION['usuario'] = $user;
         $_SESSION['rol'] = 'cliente';
         header('Location: sistema_clientes.php');
         exit;
