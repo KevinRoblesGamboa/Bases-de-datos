@@ -1,7 +1,10 @@
-<?php
-include_once('../config.php'); // Configuración
-include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
-?>
+<!-- <?php
+session_start();
+
+$user2 =$_SESSION['usuario'] ;
+$rol2=$_SESSION['rol'];
+
+?> -->
 
 
 <!DOCTYPE html>
@@ -59,6 +62,47 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
         }
     </style>
 </head>
+<body>
+
+<!-- Navbar con menú y submenú -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="https://www.instagram.com/gamba.store/?hl=es-la">Gamba Store</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Productos</a>
+        </li>
+          
+        <?php
+        
+            // Variables de sesión (ejemplo)
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['rol'] =  $rol;
+        ?>
+        <li class="nav-item">
+            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales </a>
+        </li>
+        
+      </ul>
+    </div>
+    <div class="d-flex align-items-center">
+      <!-- Información de usuario -->
+      <span class="user-info me-3"><?php echo "Correo: $usuario"; ?></span>
+      <!-- Botón de salir -->
+      <a href="logout.php" class="btn logout-btn">Salir</a>
+    </div>
+  </div>
+</nav>
+<body>
+    
+</body>
 <body>
     <h1 style="text-align: center;">Lista de Proveedores</h1>
 

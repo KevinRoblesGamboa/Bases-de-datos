@@ -1,7 +1,10 @@
-<?php
-include_once('../config.php'); // Configuración
-include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
-?>
+<!-- <?php
+session_start();
+
+$admin = $_SESSION['admin'];
+$rol=$_SESSION['rol'];
+
+?> -->
 
 
 <?php

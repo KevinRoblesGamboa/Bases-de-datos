@@ -1,8 +1,169 @@
-<?php
-include_once('../config.php'); // Configuración
-include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
-?>
+<!-- <?php
+session_start();
 
+$usuario = $_SESSION['usuario'];
+$rol=$_SESSION['rol'];
+
+?> -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Sucursales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Opciones de estilos avanzados -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .user-info {
+            font-size: 14px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #007bff; /* Color de los títulos */
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .actions {
+            text-align: center;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 2px;
+            border-radius: 4px;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+        .btn-update {
+            background-color: #3498db;
+        }
+        .btn-update:hover {
+            background-color: #2980b9;
+        }
+        .redirect-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .redirect-button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            width: 60%;
+            margin: 10px auto;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .message.warning {
+            background-color: #fff3cd; /* Amarillo claro */
+            color: #856404; /* Color del texto */
+            border: 1px solid #ffeeba; /* Borde amarillo suave */
+            padding: 10px; /* Espaciado interno */
+            margin: 10px auto; /* Centrado horizontal */
+            border-radius: 5px; /* Bordes redondeados */
+            font-family: Arial, sans-serif; /* Fuente opcional */
+            width: 50%; /* Ancho del mensaje */
+            text-align: center; /* Centrar el texto */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
+        }
+        .navbar-brand {
+    color: #28a745;
+}
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar con menú y submenú -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="https://www.instagram.com/gamba.store/?hl=es-la">Gamba Store</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="http://localhost/Bases-de-datos/sistema_clientes.php">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="http://localhost/bases-de-datos/Productos/mostrar_inventario.php">Productos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <!-- Información de usuario -->
+      <span class="user-info me-3"><?php echo "Correo: $usuario"; ?></span>
+    </div>
+  </div>
+
+</nav>
+</body>
+
+<h1>Lista de productos</h1>
 
 <?php
   // Configuración de la conexión a la base de datos
@@ -69,42 +230,6 @@ if (!oci_execute($p_cursor)) {
     echo "<p class='error'>Error al ejecutar el cursor: " . htmlentities($e['message']) . "</p>";
     exit;
 }
-
-// Incluir estilos CSS
-echo "<style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-    </style>";
 
 // Mostrar los resultados en una tabla
 echo "<table>

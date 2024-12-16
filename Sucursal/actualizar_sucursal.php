@@ -1,10 +1,4 @@
 <?php
-include_once('../config.php'); // Configuración
-include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
-?>
-
-
-<?php
   // Configuración de la conexión a la base de datos
   $host = 'localhost';
   $puerto = '1521'; // Cambia si usas un puerto diferente

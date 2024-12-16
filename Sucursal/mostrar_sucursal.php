@@ -1,6 +1,9 @@
 <!-- <?php
-include_once('../config.php'); // Configuración
-include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
+session_start();
+
+$usuario = $_SESSION['usuario'];
+$rol=$_SESSION['rol'];
+
 ?> -->
 
 
@@ -10,23 +13,38 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mostrar Sucursales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Opciones de estilos avanzados -->
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .user-info {
+            font-size: 14px;
         }
         h1 {
             text-align: center;
             color: #333;
             margin-top: 20px;
         }
+        h2 {
+            color: #007bff; /* Color de los títulos */
+        }
         table {
             width: 80%;
             margin: 20px auto;
             border-collapse: collapse;
+            margin-top: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
         }
         th, td {
@@ -107,21 +125,64 @@ include_once($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . '/navbar.php'); // Navbar
             text-align: center; /* Centrar el texto */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
         }
+        .navbar-brand {
+    color: #28a745;
+}
+        
     </style>
 </head>
+
+<body>
+
+<!-- Navbar con menú y submenú -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="https://www.instagram.com/gamba.store/?hl=es-la">Gamba Store</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="http://localhost/Bases-de-datos/sistema_clientes.php">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="http://localhost/bases-de-datos/Productos/mostrar_inventario.php">Productos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <!-- Información de usuario -->
+      <span class="user-info me-3"><?php echo "Correo: $usuario"; ?></span>
+    </div>
+  </div>
+
+</nav>
 <body>
     <h1>Lista de Sucursales</h1>
 
     <?php
-      // Configuración de la conexión a la base de datos
-$host = 'localhost';
-$puerto = '1521'; // Cambia si usas un puerto diferente
-$sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
-$contraseña = '1234567'; // Contraseña del usuario
+    
+    
+    // Configuración de la conexión a la base de datos
+    
+    
+    $host = 'localhost';
+    $puerto = '1521'; // Cambia si usas un puerto diferente
+    $sid = 'ORCL'; // SID de la base de datos Oracle
+    $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+    $contraseña = '1234567'; // Contraseña del usuario
 
-// Crear la conexión
-$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+    $user2 =$_SESSION['usuario'] ;
+    $rol2=$_SESSION['rol'];
+
+    // Crear la conexión
+    $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
     if (!$conn) {
         $e = oci_error();
@@ -179,19 +240,8 @@ $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
         // Liberar recursos
         oci_free_statement($stmt_total);
 
-
-        // $delete_stid = oci_parse($conn, 'BEGIN SP_DELETE_SUCURSAL(:id_sucursal); END;');
-        // oci_bind_by_name($delete_stid, ':id_sucursal', $id_sucursal);
-
-        // if (oci_execute($delete_stid)) {
-        //     echo "<div class='message success'>Sucursal con ID $id_sucursal eliminada correctamente.</div>";
-        // } else {
-        //     $e = oci_error($delete_stid);
-        //     echo "<div class='message error'>Error al eliminar la sucursal: " . htmlentities($e['message']) . "</div>";
-        // }
-
-        // oci_free_statement($delete_stid);
     }
+
 
     // Obtener la lista de sucursales
     $query = 'BEGIN SP_GET_SUCURSAL(:cursor); END;';
@@ -206,25 +256,38 @@ $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
         echo "<table>";
         echo "<tr><th>ID</th><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Acciones</th></tr>";
 
-        // Recorrer los resultados
+
         while ($row = oci_fetch_assoc($cursor)) {
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['ID_SUCURSAL']) . "</td>";
             echo "<td>" . htmlspecialchars($row['NOMBRE']) . "</td>";
             echo "<td>" . htmlspecialchars($row['DIRECCION']) . "</td>";
             echo "<td>" . htmlspecialchars($row['TELEFONO']) . "</td>";
-            echo "<td class='actions'>";
-            echo "<form method='POST' style='display: inline;'>";
-            echo "<input type='hidden' name='id_sucursal' value='" . htmlspecialchars($row['ID_SUCURSAL']) . "'>";
-            echo "<button type='submit' class='btn btn-delete' onclick='return confirm(\"¿Estás seguro de eliminar esta sucursal?\");'>Eliminar</button>";
-            echo "</form>";
-            echo "<a href='actualizar_sucursal.php?id_sucursal=" . urlencode($row['ID_SUCURSAL']) . "' class='btn btn-update'>Actualizar</a>";
+
+            // Validación de roles antes de mostrar los botones
+            if ($rol2 == 'admin') {
+                echo "<td class='actions'>";
+                // Mostrar el botón de Eliminar para el rol admin
+                echo "<form method='POST' style='display: inline;'>";
+                echo "<input type='hidden' name='id_sucursal' value='" . htmlspecialchars($row['ID_SUCURSAL']) . "'>";
+                echo "<button type='submit' class='btn btn-delete' onclick='return confirm(\"¿Estás seguro de eliminar esta sucursal?\");'>Eliminar</button>";
+                echo "</form>";
+        
+                // Mostrar el botón de Actualizar para el rol admin
+                echo "<a href='actualizar_sucursal.php?id_sucursal=" . urlencode($row['ID_SUCURSAL']) . "' class='btn btn-update'>Actualizar</a>";
+            } elseif ($rol2 == 'cliente') {
+             
+            }
+        
             echo "</td>";
             echo "</tr>";
         }
-
+        
         echo "</table>";
-    } else {
+        
+    }
+    else 
+    {
         $e = oci_error($stid);
         echo "<div class='message error'>Error al obtener la lista de sucursales: " . htmlentities($e['message']) . "</div>";
     }

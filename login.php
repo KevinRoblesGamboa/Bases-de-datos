@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Llamado al SP
         $stmt = $pdo->prepare("BEGIN OBTENER_ROL(:email, :contrasena, :rol); END;");
         
-
         // Vincular parámetros
         $stmt->bindParam(':email', $user, PDO::PARAM_STR);
         $stmt->bindParam(':contrasena', $password, PDO::PARAM_STR);
@@ -41,22 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Ejecutar el SP
         $stmt->execute();
 
-        // Mostrar el rol obtenido
-        //echo "Rol obtenido: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         exit;
     }
-
-    //echo "Rol obtenido2: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
 
     if (strtolower($rol) === '')
     {
         header('Location: login.php?error=acceso_denegado&rol=' . urlencode($rol));
         exit;
     }
-
 
     // Verificar el valor de rol y redirigir según el caso
     if (strtolower($rol) === 'admin')
@@ -66,12 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: sistema_gestion_tienda.php');
         exit;
     } 
-    
-    
-    //echo "Rol obtenido3: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
-    
-    // ----
-    //     
+     
     try 
     {
 
@@ -89,11 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Ejecutar el SP
         $stmt2->execute();
 
-        // Mostrar el rol obtenido
-        // echo "Rol obtenido Cliente: " . $usuario . "<br>";  // Mostrar el valor obtenido de la base de datos
-        // echo "Rol obtenido Cliente: " . $password . "<br>";  // Mostrar el valor obtenido de la base de datos
-        //echo "Rol obtenido Cliente: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         exit;
@@ -106,13 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: sistema_clientes.php');
         exit;
     } 
-    // ---------------------------------------------------------------------
-
-    // if (strtolower(trim($rol)) === 'Cliente') {
-    //     $_SESSION['usuario'] = $usuario;
-    //     $_SESSION['rol'] = 'Cliente';
-    //     echo "Rol obtenido3: " . $rol . "<br>";  // Mostrar el valor obtenido de la base de datos
-    //header('Location: ');
 
 
 }
@@ -144,15 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-    <!-- <h1 style="text-align: center;">Inicio de Sesión</h1>
-    <form method="POST">
-        <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario" required>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-        <input type="submit" value="Iniciar Sesión">
-        <a href="insertar_cliente.php" class="btn-register">Registrar</a>
-    </form> -->
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="login-container">

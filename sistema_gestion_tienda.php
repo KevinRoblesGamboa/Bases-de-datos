@@ -5,7 +5,10 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     exit;
 }
 
-$user = $_SESSION['usuario'];
+// Suponiendo que tienes una sesión activa y los datos del usuario
+$usuario = $_SESSION['usuario'];
+$rol=$_SESSION['rol'];
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -52,7 +55,7 @@ $user = $_SESSION['usuario'];
         }
 
         footer .social-icons a:hover {
-            color: #007bff; /* Color de hover para los iconos */
+            color: #000000; /* Color de hover para los iconos */
         }
 
         .info-section, .clients-section, .stats-section {
@@ -63,7 +66,7 @@ $user = $_SESSION['usuario'];
         }
 
         h2 {
-            color: #007bff; /* Color de los títulos */
+            color: #000000; /* Color de los títulos */
         }
 
         .table {
@@ -85,10 +88,14 @@ $user = $_SESSION['usuario'];
             font-size: 1rem;
             color: #fff;
         }
+        .navbar-brand {
+    color: #28a745;
+}
 
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="https://www.instagram.com/gamba.store/?hl=es-la">Gamba Store</a>
@@ -98,17 +105,21 @@ $user = $_SESSION['usuario'];
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Inicio</a>
+          <a class="nav-link active" href="http://localhost/Bases-de-datos/sistema_gestion_tienda.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="#">Productos</a>
+          <a class="nav-link active" href="http://localhost/Bases-de-datos/categorias.php">Categorias</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link active" href="#">Sucursales</a>
-        </li> -->
-        <!-- <li class="nav-item">
-            <a class="nav-link active" href="http://localhost/bases-de-datos/Sucusal/mostrar_sucursal.php">Sucursales 2</a>
-        </li> -->
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Productos
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Productos/insertar_productos.php">Agregar productos</a></li>
+            <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Productos/mostrar_inventario.php">Mostrar inventario</a></li>
+            <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Productos/actualizar_producto.php">Actualizar producto</a></li>
+        </ul>
+    </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Sucursales
@@ -118,8 +129,48 @@ $user = $_SESSION['usuario'];
             <li><a class="dropdown-item" href="#">Mostrar Sucursales</a></li>
             <li><a class="dropdown-item" href="#">Actualizar Sucursales</a></li>
           </ul>
+          </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Clientes
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Cliente/actualizar_cliente.php">Actualizar clientes</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Cliente/mostrar_clientes.php">Mostrar clientes</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Cliente/insertar_clientes.php">Insertar clientesliente</a></li>
+            </ul>
         </li>
-      </ul>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Empleados
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Empleado/actualizar_empleado.php">Actualizar empleados</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Empleado/mostrar_empleados.php">Mostrar empleados</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Empleado/insertar_empleados.php">Insertar empleados</a></li>
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Proveedores
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Proveedor/actualizar_proveedor.php">Actualizar proveedor</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Proveedor/mostrar_proveedor.php">Mostrar proveedor</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Proveedor/insertar_proveedor.php">Insertar proveedor</a></li>
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Sucursales
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Sucursal/actualizar_sucursal.php">Actualizar sucursal</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Sucursal/mostrar_sucursal.php">Mostrar sucursal</a></li>
+                <li><a class="dropdown-item" href="http://localhost/Bases-de-datos/Sucursal/insertar_sucursal.php">Insertar sucursal</a></li>
+            </ul>
+        </li>
+</ul>
     </div>
     <div class="d-flex align-items-center">
       <!-- Información de usuario -->
@@ -132,22 +183,15 @@ $user = $_SESSION['usuario'];
 
 <!-- Mensaje de bienvenida -->
 <div class="container">
-    <h1>Bienvenido al sistema de gestión de tienda, <?php echo htmlspecialchars($_SESSION['usuario']); ?>.</h1>
+    <h1>Bienvenido al sistema de gestión de tienda estimado Administrador.</h1>
     
     <!-- Sección de información general -->
     <section class="info-section">
-        <h2>Información General</h2>
-        <p>En esta sección puedes gestionar todos los datos relacionados con los clientes y su historial. Accede a los menús para agregar, editar o eliminar información.</p>
+        <h2>Información General para el Administrador</h2>
+        <p>En esta sección, encontrarás herramientas para gestionar todos los aspectos importantes de la tienda, incluyendo la actualización de productos, la gestión de inventarios y el control de clientes.
+
+Es esencial que, como administrador, maneje los datos de la empresa de manera responsable y segura. Los datos relacionados con nuestros productos, ventas, inventarios y clientes deben ser tratados con la máxima confidencialidad y de acuerdo con las políticas internas de protección de datos.</p>
     </section>
-
-    <!-- Sección de clientes -->
-    <section class="product-carousel">
-    <h2>Productos Destacados</h2>
-    <p>Descubre nuestros productos más populares, con imágenes y detalles que te encantarán.</p>
-
-    <section class="product-carousel">
-        <h2>Productos Destacados</h2>
-        <p>Descubre nuestros productos más populares, con imágenes y detalles que te encantarán.</p>
 
         <!-- Carousel de productos -->
         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
