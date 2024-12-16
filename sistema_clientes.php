@@ -110,7 +110,6 @@ $rol=$_SESSION['rol'];
         .navbar-brand {
             color: #28a745;
         }
-
     </style>
 </head>
 <body>
@@ -191,10 +190,10 @@ $rol=$_SESSION['rol'];
                 </div>
                 <!-- Producto 3 -->
                 <div class="carousel-item">
-                    <img src="https://via.placeholder.com/800x400?text=Producto+3" alt="Producto 3">
+                    <img src="https://tiendasplx.com/wp-content/uploads/2024/07/adyha04161-kpv0_1-300x300.jpg" alt="Producto 3">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Producto 3</h5>
-                        <p>Descripción breve del producto 3.</p>
+                        <h5>Gorras</h5>
+                        <p>Las mejores gorras para vos </p>
                     </div>
                 </div>
             </div>

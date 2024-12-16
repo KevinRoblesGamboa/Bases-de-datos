@@ -15,7 +15,7 @@ $rol=$_SESSION['rol'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Clientes</title>
+    <title>Sistema de Administracion</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
          body {
@@ -198,26 +198,28 @@ Es esencial que, como administrador, maneje los datos de la empresa de manera re
             <div class="carousel-inner">
                 <!-- Producto 1 -->
                 <div class="carousel-item active">
-                    <img src="https://via.placeholder.com/800x400?text=Producto+1" class="d-block w-100" alt="Producto 1">
+                    <img 
+                        src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9fcc3257-f71e-436d-bc2b-aaa5377971d8/calzado-grandes-air-jordan-1-low-og-SR5bqn.png" 
+                        alt="Producto 1">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Producto 1</h5>
-                        <p>Descripción breve del producto 1.</p>
+                        <h5>Tenis</h5>
+                        <p>Las mejores tenis para vos</p>
                     </div>
                 </div>
                 <!-- Producto 2 -->
                 <div class="carousel-item">
-                    <img src="https://via.placeholder.com/800x400?text=Producto+2" class="d-block w-100" alt="Producto 2">
+                    <img src="https://i.pinimg.com/736x/bc/03/13/bc03134040fd512dd60030f64e059cc9.jpg" alt="Producto 2">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Producto 2</h5>
-                        <p>Descripción breve del producto 2.</p>
+                        <h5>T-Shirt</h5>
+                        <p>Las mejores camisas para vos</p>
                     </div>
                 </div>
                 <!-- Producto 3 -->
                 <div class="carousel-item">
-                    <img src="https://via.placeholder.com/800x400?text=Producto+3" class="d-block w-100" alt="Producto 3">
+                    <img src="https://tiendasplx.com/wp-content/uploads/2024/07/adyha04161-kpv0_1-300x300.jpg" alt="Producto 3">
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>Producto 3</h5>
-                        <p>Descripción breve del producto 3.</p>
+                        <h5>Gorras</h5>
+                        <p>Las mejores gorras para vos </p>
                     </div>
                 </div>
             </div>

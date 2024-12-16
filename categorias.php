@@ -1,3 +1,11 @@
+<!-- <?php
+session_start();
+
+$usuario = $_SESSION['usuario'];
+$rol=$_SESSION['rol'];
+
+?> -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -62,14 +70,14 @@
     <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
          // Configuración de la conexión a la base de datos
-$host = 'localhost';
-$puerto = '1521'; // Cambia si usas un puerto diferente
-$sid = 'ORCL'; // SID de la base de datos Oracle
-$usuario = 'PROYECTOSC504'; // Usuario de la base de datos
-$contraseña = '1234567'; // Contraseña del usuario
+        $host = 'localhost';
+        $puerto = '1521'; // Cambia si usas un puerto diferente
+        $sid = 'ORCL'; // SID de la base de datos Oracle
+        $usuario = 'PROYECTOSC504'; // Usuario de la base de datos
+        $contraseña = '1234567'; // Contraseña del usuario
 
-// Crear la conexión
-$conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
+        // Crear la conexión
+        $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
 
         if (!$conn) {
             $e = oci_error();
@@ -77,32 +85,56 @@ $conn = oci_connect($usuario, $contraseña, "$host:$puerto/$sid");
             exit;
         }
 
+
         // Recibir datos del formulario
         $id_categoria = $_POST['id_categoria'];
         $nombre_categoria = $_POST['nombre_categoria'];
         $descripcion = $_POST['descripcion'];
 
-        // Llamada al procedimiento almacenado para insertar la categoría
-        $query = 'BEGIN sp_insert_categoria(:id_categoria, :nombre_categoria, :descripcion); END;';
-        $stid = oci_parse($conn, $query);
+        //validacion de la cateogoria
+        $check_query = "SELECT COUNT(*) AS TOTAL FROM CATEGORIAS WHERE NOMBRE_CATEGORIA = :nombre_categoria";
+        $stid_check = oci_parse($conn, $check_query);
+        // Enlazar el parámetro
+        oci_bind_by_name($stid_check, ':nombre_categoria', $nombre_categoria);
 
-        // Enlazar los parámetros
-        oci_bind_by_name($stid, ':id_categoria', $id_categoria);
-        oci_bind_by_name($stid, ':nombre_categoria', $nombre_categoria);
-        oci_bind_by_name($stid, ':descripcion', $descripcion);
+        // Ejecutar la consulta
+        oci_execute($stid_check);
 
-        // Ejecutar el procedimiento
-        $result = oci_execute($stid);
+        $row = oci_fetch_assoc($stid_check);
+        $total = $row['TOTAL'];
+        if ($total > 0) {
+            // Si la categoría ya existe
+            
 
-        if ($result) {
-            echo "<p class='message'>Categoría insertada con éxito.</p>";
-        } else {
-            $e = oci_error($stid);
-            echo "<p class='error'>Error al insertar la categoría: " . htmlentities($e['message']) . "</p>";
+            echo "<p class='error'>Error: La categoría '$nombre_categoria' ya existe en la base de datos.</p>";
         }
+        else 
+        {
 
-        // Liberar recursos y cerrar conexión
-        oci_free_statement($stid);
+
+
+            // Llamada al procedimiento almacenado para insertar la categoría
+            $query = 'BEGIN sp_insert_categoria(:id_categoria, :nombre_categoria, :descripcion); END;';
+            $stid = oci_parse($conn, $query);
+
+            // Enlazar los parámetros
+            oci_bind_by_name($stid, ':id_categoria', $id_categoria);
+            oci_bind_by_name($stid, ':nombre_categoria', $nombre_categoria);
+            oci_bind_by_name($stid, ':descripcion', $descripcion);
+
+            // Ejecutar el procedimiento
+            $result = oci_execute($stid);
+
+            if ($result) {
+                echo "<p class='message'>Categoría insertada con éxito.</p>";
+            } else {
+                $e = oci_error($stid);
+                echo "<p class='error'>Error al insertar la categoría: " . htmlentities($e['message']) . "</p>";
+            }
+            oci_free_statement($stid);
+
+        }
+        oci_free_statement($stid_check);
         oci_close($conn);
     }
     ?>
