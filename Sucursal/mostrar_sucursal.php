@@ -25,6 +25,7 @@ $rol=$_SESSION['rol'];
         .navbar {
             margin-bottom: 20px;
         }
+        
         .logout-btn {
             background-color: #dc3545;
             color: white;

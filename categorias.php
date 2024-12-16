@@ -9,11 +9,18 @@ $rol=$_SESSION['rol'];
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Insertar Categoría</title>
     <style>
+         body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        
         form {
             width: 50%;
             margin: 20px auto;
@@ -93,6 +100,7 @@ $rol=$_SESSION['rol'];
         .btn-delete:active {
             background-color: #f08070; /* Rojo más claro al presionar */
         }
+
     </style>
 </head>
 
@@ -175,7 +183,12 @@ $rol=$_SESSION['rol'];
     <div class="d-flex align-items-center">
       <!-- Información de usuario -->
       <span class="user-info me-3"><?php echo "Correo: $usuario"; ?></span>
-      </nav>
+      <!-- Botón de salir -->
+      <a href="logout.php" class="btn logout-btn">Salir</a>
+    </div>
+  </div>
+</nav>
+
 <body>
 
     <h1 style="text-align: center;">Insertar Categoría</h1>
@@ -351,5 +364,7 @@ $rol=$_SESSION['rol'];
 
 
     ?>
+    <!-- Bootstrap Bundle con Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
